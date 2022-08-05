@@ -1,0 +1,54 @@
+{% extends 'base_generic.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %} 
+
+<article class="post">
+    <div class="post-content">
+        
+        <form action="" class="site-form" method="post">
+            {% csrf_token %}
+            <div class="mb-5 site-form-header bg-indigo-300 rounded px-2">
+                <h2 class="text-center">Create a new guideline</h2>
+            </div>
+
+            <table>
+                {% for field in form %}
+                <tr>
+                    <!-- <td width="25%"><strong> -->
+                        {% if 'content' in field.name %}
+                            <td width="25%" style="vertical-align:top">{{ field.label_tag }}</td>
+                        {% else %}
+                            <td width="25%">{{ field.label_tag }}</td>
+                        {% endif %}
+                        <!-- </strong></td> -->
+                    <td width="70%"> {{ field }} 
+                        <!-- Errors -->
+                        {% for error in field.errors %}
+                            <p class="error error-danger">{{ error }}</p>
+                        {% endfor %}
+                        <!-- Help text -->
+                        {% if not field.field.widget.attrs.placeholder and field.help_text %}
+                            <p class="helptext">{{ field.help_text }}</p>
+                        {% endif %}
+                    </td>
+                    <td width="5%"></td>
+                </tr>
+                {% endfor %}               
+            </table>
+
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+            <div class="button-container">
+                <button class="next-button bg-green-400 hover:bg-green-300 text-base" type="submit">Next <span>&#187;</span></button>
+                <a href="{% url 'instruments:home' %}" class="cancelbtn bg-red-500 hover:bg-red-300 text-center">Cancel</a>
+			</div>
+
+        </form>
+    </div>
+</article>
+
+
+{% endblock %}
